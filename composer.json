@@ -1,0 +1,17 @@
+{
+    "name": "bruno/mvc-starter",
+    "type": "project",
+    "license": "Bruno Krapljan",
+    "autoload": {
+        "psr-4": {
+            "Bruno\\MvcStarter\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Bkrap",
+            "email": "61564964+Bkrap@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}

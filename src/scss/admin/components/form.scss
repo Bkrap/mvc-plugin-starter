@@ -1,0 +1,14 @@
+.cfbk-form-wrap {
+    display: flex;
+    flex-direction: column;
+ }
+
+ .resume-wrap {
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+ }
+
+ #myFile {
+   display: none;
+ }
