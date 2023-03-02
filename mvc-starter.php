@@ -2,7 +2,7 @@
 /*
 Plugin Name: MVC Starter
 Description: An example of MVC implementation in WordPress plugin
-Version: 1.0.0.0
+Version: 1.0.0
 Author: Bruno Krapljan
 Author URI: web-throne.org
 */
@@ -11,6 +11,7 @@ class MVC_Starter {
  
     public function __construct() {
 
+        // Define MVC paths
         define('MODEL_DIR', plugin_dir_path( __FILE__ ) . 'models/' );
         define('VIEW_DIR', plugin_dir_path( __FILE__ ) . 'views/');
         define('CONTROLLER_DIR', plugin_dir_path( __FILE__ ) . 'controllers/');
@@ -50,6 +51,7 @@ class MVC_Starter {
  
         // Enqueue the public scripts
         wp_enqueue_script( 'mvc-starter-public-script', plugins_url( 'dist/public.js', __FILE__ ), array( 'jquery' ), '1.0.0', false );
+        
         $ajax_url = admin_url( 'admin-ajax.php' );
         wp_localize_script( 'mvc-starter-public-script', 'my_script_vars', array(
             'ajax_url' => $ajax_url,
