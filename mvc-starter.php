@@ -11,18 +11,9 @@ class MVC_Starter {
  
     public function __construct() {
 
-        // Define folder structure
-        define('MODEL_ADMIN_DIR', plugin_dir_path( __FILE__ ) . 'models/admin/' );
-        define('VIEW_ADMIN_DIR', plugin_dir_path( __FILE__ ) . 'views/admin/' );
-        define('CONTROLLER_ADMIN_DIR', plugin_dir_path( __FILE__ ) . '/controllers/admin/' );
-
-        define('MODEL_PUBLIC_DIR', plugin_dir_path( 'models/public/', __FILE__ ));
-        define('VIEW_PUBLIC_DIR', plugin_dir_path( 'views/public/', __FILE__ ));
-        define('CONTROLLER_PUBLIC_DIR', plugin_dir_path( 'controllers/public/', __FILE__ ));
-
-        define('MODEL_DIR', plugin_dir_path( 'models/', __FILE__ ));
-        define('VIEW_DIR', plugin_dir_path( 'views/', __FILE__ ));
-        define('CONTROLLER_DIR', plugin_dir_path( 'controllers/', __FILE__ ));
+        define('MODEL_DIR', plugin_dir_path( __FILE__ ) . 'models/' );
+        define('VIEW_DIR', plugin_dir_path( __FILE__ ) . 'views/');
+        define('CONTROLLER_DIR', plugin_dir_path( __FILE__ ) . 'controllers/');
 
         // Add actions and filters
         add_action( 'init', array( $this, 'init' ) );
