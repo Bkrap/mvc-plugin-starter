@@ -12,9 +12,9 @@ class MVC_Starter {
     public function __construct() {
 
         // Define MVC paths
-        define('MODEL_DIR', plugin_dir_path( __FILE__ ) . 'models/' );
-        define('VIEW_DIR', plugin_dir_path( __FILE__ ) . 'views/');
-        define('CONTROLLER_DIR', plugin_dir_path( __FILE__ ) . 'controllers/');
+        define('MODEL_DIR', plugin_dir_path( __FILE__ ) . 'app/models/' );
+        define('VIEW_DIR', plugin_dir_path( __FILE__ ) . 'app/views/');
+        define('CONTROLLER_DIR', plugin_dir_path( __FILE__ ) . 'app/controllers/');
 
         // Add actions and filters
         add_action( 'init', array( $this, 'init' ) );
@@ -23,6 +23,10 @@ class MVC_Starter {
 
     }
  
+/**
+ * Load MVC index files
+ * @since 1.0.0.
+ */
     public function init() {
         // Initialize the MVC components
         $this->init_controllers();
@@ -30,21 +34,29 @@ class MVC_Starter {
         $this->init_views();
     }
  
-    public function init_controllers() {
-        // Load the controllers
-        include_once( 'controllers/controller-index.php' );
-    }
- 
+/**
+ * Define main MVC init methods
+ * @since 1.0.0.
+ */
     public function init_models() {
         // Load the models
-        include_once( 'models/model-index.php' );
+        include_once( MODEL_DIR . 'model-index.php' );
     }
  
     public function init_views() {
         // Load the views
-        include_once( 'views/view-index.php' );
+        include_once( VIEW_DIR . 'view-index.php' );
     }
- 
+
+    public function init_controllers() {
+        // Load the controllers
+        include_once( CONTROLLER_DIR . 'controller-index.php' );
+    }
+
+/**
+ * Load admin & public style and scripts
+ * @since 1.0.0.
+ */
     public function enqueue_public_scripts() {
         // Enqueue the public styles
         wp_enqueue_style( 'mvc-starter-public-style', plugins_url( 'dist/style-public.css', __FILE__ ), array(), '1.0.0' );
@@ -52,6 +64,7 @@ class MVC_Starter {
         // Enqueue the public scripts
         wp_enqueue_script( 'mvc-starter-public-script', plugins_url( 'dist/public.js', __FILE__ ), array( 'jquery' ), '1.0.0', false );
         
+        // Localize ajax_url path to be accessible from JS files as variable.
         $ajax_url = admin_url( 'admin-ajax.php' );
         wp_localize_script( 'mvc-starter-public-script', 'my_script_vars', array(
             'ajax_url' => $ajax_url,

@@ -1,9 +1,8 @@
 <?php
 
-
 if ( is_admin() ) { // Admin View
 
-    include('admin/admin-page.php');
+    // admin-page.php view is init in Admin_Page_Controller.php with renderAdminPage() method
 
 } else { // Public View
 
