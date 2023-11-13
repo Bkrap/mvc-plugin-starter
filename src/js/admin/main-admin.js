@@ -3,8 +3,7 @@
 	
 	jQuery(document).ready(function () {
 
-		console.log("Admin js initialized");
-		
+		console.log("Admin js initializedsss");
 	});
 
 })( jQuery );

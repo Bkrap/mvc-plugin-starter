@@ -1,1 +1,1 @@
-!function(i){"use strict";jQuery(document).ready((function(){console.log("Admin js initialized")}))}(jQuery);
+!function(i){"use strict";jQuery(document).ready((function(){console.log("Admin js initializedsss")}))}(jQuery);
