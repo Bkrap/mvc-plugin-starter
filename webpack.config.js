@@ -18,7 +18,21 @@ module.exports = {
     chunkFilename: '[name].[chunkhash].chunk.js',
     // Where the CSS is saved to
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/argo/',
   },
+
+    // Add this section to enable webpack-dev-server
+    devServer: {
+      static: {
+        directory: path.join(__dirname, 'dist'),
+      },
+      compress: true,
+      port: 80,
+      hot: true,
+      historyApiFallback: {
+        index: '/argo/',
+      },
+    },
 
   resolve: {
     extensions: ['.css', '.scss'],

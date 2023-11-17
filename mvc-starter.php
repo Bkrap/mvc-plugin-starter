@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: MVC Starter
-Description: An example of MVC implementation in WordPress plugin
-Version: 1.0.0
+Plugin Name: Open AI Playground
+Description: https://platform.openai.com/docs/
+Version: 1.0.2
 Author: Bruno Krapljan
 Author URI: web-throne.org
 */
@@ -73,10 +73,10 @@ class MVC_Starter {
  
     public function enqueue_admin_scripts() {
         // Enqueue the admin styles
-        wp_enqueue_style( 'mvc-starter-admin-style', plugins_url( 'dist/style-admin.css', __FILE__ ), array(), '1.0.0' );
+        wp_enqueue_style( 'mvc-starter-admin-style', plugins_url( 'dist/style-admin.css', __FILE__ ), array(), '1.0.1' );
  
         // Enqueue the admin scripts
-        wp_enqueue_script( 'mvc-starter-admin-script', plugins_url( 'dist/admin.js', __FILE__ ), array( 'jquery' ), '1.0.0', false );
+        wp_enqueue_script( 'mvc-starter-admin-script', plugins_url( 'dist/admin.js', __FILE__ ), array( 'jquery' ), '1.0.1', false );
     }
  
 }
