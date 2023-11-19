@@ -11,7 +11,7 @@
 		/**
 		 * Open AI API return img data in base64 format
 		 */
-		let OPENAI_API_KEY = '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';
+		let OPENAI_API_KEY = '';
 		let generateForm = document.querySelector('.generate-form');
 
 		let encodeImage = (imgDataArray) => {
