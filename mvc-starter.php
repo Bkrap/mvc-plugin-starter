@@ -2,7 +2,7 @@
 /*
 Plugin Name: Open AI Playground
 Description: https://platform.openai.com/docs/
-Version: 1.0.2
+Version: 1.0.3
 Author: Bruno Krapljan
 Author URI: web-throne.org
 */
@@ -76,7 +76,7 @@ class MVC_Starter {
         wp_enqueue_style( 'mvc-starter-admin-style', plugins_url( 'dist/style-admin.css', __FILE__ ), array(), '1.0.1' );
  
         // Enqueue the admin scripts
-        wp_enqueue_script( 'mvc-starter-admin-script', plugins_url( 'dist/admin.js', __FILE__ ), array( 'jquery' ), '1.0.1', false );
+        wp_enqueue_script( 'mvc-starter-admin-script', plugins_url( 'dist/admin.js', __FILE__ ), array( 'jquery' ), '1.0.2', false );
     }
  
 }

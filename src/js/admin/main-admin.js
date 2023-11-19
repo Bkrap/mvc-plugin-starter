@@ -1,4 +1,5 @@
-// import openAiFetch from 'open-ai-fetch';
+// import generateSpeech from './models/generateSpeech.js';
+
 
 
 (function( $ ) {
@@ -6,11 +7,11 @@
 	
 	jQuery(document).ready(function () {
 
-		console.log("Admin js wegsreraheraheraherhaerjhaerjheahe ");
+		console.log("Admin js");
 		/**
 		 * Open AI API return img data in base64 format
 		 */
-		let OPENAI_API_KEY = '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';
+		let OPENAI_API_KEY = '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';
 		let generateForm = document.querySelector('.generate-form');
 
 		let encodeImage = (imgDataArray) => {
@@ -36,8 +37,9 @@
 		let handleFormSubmission = (e) => {
 			e.preventDefault();
 
-			let userPrompt = document.querySelector('#prompt-input').value;
+			let userPrompt = document.querySelector('#textInput').value;
 			let userImgNum = document.querySelector('#img-quantity').value;
+			let textAreaValue = document.querySelector('#text-to-speech').value;
 
 			let imgCardMarkup = Array.from({length: userImgNum}, () => {
 				return `
@@ -49,14 +51,76 @@
 
 			document.querySelector('.img-container').innerHTML = imgCardMarkup;
 
-			generateAiImages(userPrompt, userImgNum);
+			if( userPrompt ) {
+				generateAiImages(userPrompt, userImgNum);
+			}
+			// translateAudioUrlToText(textAreaValue);
+			if( textAreaValue ) {
+				generateSpeech(textAreaValue);
+			}
 
 		}
 
 		if( generateForm ) {
 			generateForm.addEventListener('submit', handleFormSubmission);
 		}
+		
+		/**
+		 * Audio record
+		 */
+		let rec;
+		let audioChunks;
+		async function recordAudioStreamToTextResult() {
+			try {
+			  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+			  await recordAudioStreamToText(stream);
+			  return recordAudioStreamToText(stream);
+			} catch (error) {
+			  console.log(error);
+			}
+		}
+		  
+		function recordAudioStreamToText(stream) {
+			try {
+				rec = new MediaRecorder(stream);
+				rec.ondataavailable = async (e) => {
+	
+					audioChunks.push(e.data);
+					if (rec.state == "inactive"){
+						let blob = new Blob(audioChunks,{type:'audio/mp3'});
+						recordedAudio.src = URL.createObjectURL(blob);
+						recordedAudio.controls = true;
+						recordedAudio.autoplay = true;
+	
+						// Parse to audio element and joinHTML
+						sendData(blob);
+						let translationResult = await translateAudioFileToText(blob);
+						generateSpeech(translationResult.text);
+					}
+	
+				}
+			}
+			catch(error) {
+				console.log(error);
+			}
+		}
 
+		function sendData(data) {}
+
+			record.onclick = e => {
+				record.disabled = true;
+				stopRecord.disabled = false;
+				record.style.backgroundColor = "blue"
+				audioChunks = [];
+				rec.start();
+			}
+
+			stopRecord.onclick = e => {
+				record.disabled = false;
+				stop.disabled=true;
+				record.style.backgroundColor = "red"
+				rec.stop();
+			}
 
 		let generateAiImages = async (userPrompt, userImgNum) => {
 			try {
@@ -90,33 +154,63 @@
 			}
 		}
 
-		let models = async () => {
+		let translateAudioUrlToText = async (audioFilePath = "https://audio-samples.github.io/samples/mp3/blizzard_unconditional/sample-0.mp3") => {
 			try {
-				let response = await fetch('https://api.openai.com/v1/models', {
-					method: 'GET',
-					headers: {
-						'Authorization': `Bearer ${OPENAI_API_KEY}`
-					}
-				})
-
-				if( !response.ok ) {
-					throw Error(response.statusText + " response not ok!");
-				}
-
-				let { data } = await response.json();
-
-				console.log(data);
-
+			  const formData = new FormData();
+			  const file = await fetch(audioFilePath).then(response => response.blob());
+			  formData.append("file", file);
+			  formData.append("model", "whisper-1");
+		  
+			  const response = await fetch('https://api.openai.com/v1/audio/translations', {
+				method: 'POST',
+				headers: {
+				  'Authorization': `Bearer ${OPENAI_API_KEY}`,
+				},
+				body: formData
+			  });
+		  
+			  if (!response.ok) {
+				throw Error(response.statusText + " response not ok!");
+			  }
+		  
+			  const data = await response.json();
+			  console.log(data);
+			} catch (error) {
+			  console.log(error);
 			}
-			catch(error) {
-				console.log(error);
+		};
+
+		let translateAudioFileToText = async (file) => {
+		try {
+			const formData = new FormData();
+			formData.append("file", file);
+			formData.append("model", "whisper-1");
+		
+			const response = await fetch('https://api.openai.com/v1/audio/translations', {
+			method: 'POST',
+			headers: {
+				'Authorization': `Bearer ${OPENAI_API_KEY}`,
+			},
+			body: formData
+			});
+		
+			if (!response.ok) {
+			throw Error(response.statusText + " response not ok!");
 			}
+		
+			const data = await response.json();
+			return data;
+			
+		} catch (error) {
+			console.log(error);
 		}
+		};
+		  
 
-		let generateSpeech = async (textData = "null, please insert. Nema Vishe") => {
+		let generateSpeech = async (textData = "No input man!") => {
 			try {
 				let mainDiv = document.querySelector('.playground-field-results');
-
+		
 				let response = await fetch('https://api.openai.com/v1/audio/speech', {
 					method: 'POST',
 					headers: {
@@ -126,79 +220,34 @@
 					body: JSON.stringify({
 						"model": "tts-1-hd",
 						"input": textData,
-						"voice": "alloy"
+						"voice": "onyx"
 					}),
 					responseType: "arraybuffer"
 				})
-
+		
 				if( !response.ok ) {
 					throw Error(response.statusText + " response not ok!");
 				}
-
+		
 				let data = await response.arrayBuffer();
-
+		
 				const reader = new FileReader();
 				const blob = new Blob([data], { 
 					type: 'audio/ogg' 
 				});
-
+		
 				// When the FileReader has finished loading the Blob data
 				reader.onloadend = function() {
 					const audioSrc = reader.result;
 					const audio = document.createElement('audio');
-
+		
 					audio.src = audioSrc;
 					audio.controls = true;
 					mainDiv.appendChild(audio);
 				};
-
+		
 				reader.readAsDataURL(blob);
-
-			}
-			catch(error) {
-				console.log(error);
-			}
-		}
-
-		let translateAudioToText = async (audioUrl = "https://audio-samples.github.io/samples/mp3/blizzard_unconditional/sample-0.mp3") => {
-			try {
-				let mainDiv = document.querySelector('.playground-field-results');
-
-
-				const reader = new FileReader();
-				const blob = new Blob([audioUrl], { 
-					type: 'audio/mp3' 
-				});
-
-				// When the FileReader has finished loading the Blob data
-				reader.onloadend = function() {
-					audio.src = audioSrc;
-					audio.controls = true;
-					mainDiv.appendChild(audio);
-				};
-
-				reader.readAsDataURL(blob);
-
-				let response = await fetch('https://api.openai.com/v1/audio/translations', {
-					method: 'POST',
-					headers: {
-						'Authorization': `Bearer ${OPENAI_API_KEY}`,	
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						"model": "whisper-1",
-						"file": reader.readAsDataURL(blob),
-					}),
-					responseType: "arraybuffer"
-				})
-
-				if( !response.ok ) {
-					throw Error(response.statusText + " response not ok!");
-				}
-
-				let data = await response.json();
-				console.log(data);
-
+		
 			}
 			catch(error) {
 				console.log(error);
@@ -208,11 +257,9 @@
 		/**
 		 * Speech!
 		 */
-		generateSpeech("Ja sam iz Hrvatske, želim pričati Hrvatski. Dolazim iz Zagreba i oke mi je.");
-
-
-		// translateAudioToText("https://audio-samples.github.io/samples/mp3/blizzard_unconditional/sample-0.mp3");
-
+		generateSpeech("Hrvatski pričam, iz Zagreba sam. Kud moji mili moji... otvor' ženo kapiju... Jao man'se oče naša!!! Evo mene i mojih pajdaša! Jihawww!!");
+		translateAudioUrlToText("https://audio-samples.github.io/samples/mp3/blizzard_unconditional/sample-0.mp3");
+		recordAudioStreamToTextResult();
 		/**
 		 * ACF PARSE TO IMG (no group)
 		 */

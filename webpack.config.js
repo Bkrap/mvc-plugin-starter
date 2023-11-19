@@ -5,7 +5,9 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const sass = require('node-sass');
 const TerserPlugin = require("terser-webpack-plugin");
-
+const nodeExternals = require('webpack-node-externals');
+// const fetch = require('node-fetch');
+// const FormData = require('form-data');
 // Hard code this to production but can be adapted to accept args to change env.
 const mode = 'production';
 
@@ -20,6 +22,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/argo/',
   },
+  externals: [nodeExternals()],
 
     // Add this section to enable webpack-dev-server
     devServer: {
