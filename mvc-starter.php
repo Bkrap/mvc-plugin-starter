@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: Open AI Playground
-Description: https://platform.openai.com/docs/
+Plugin Name: mvc-plugin-starter
+Description: Template for creating complex WP plugins wtih MVC flow, easy and managable.
 Version: 1.0.3
 Author: Bruno Krapljan
-Author URI: web-throne.org
+Author URI: -
 */
 
 class MVC_Starter {
